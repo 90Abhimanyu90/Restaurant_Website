@@ -1,0 +1,6 @@
+For this project prior Knowledge of the following topics is a MUST. You may face difficulty understanding it if not done properly.
+1 : CORS 
+2 : dotenv
+3 : express
+4 : mongoose
+5 : validator
