@@ -4,6 +4,7 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import "./Reservation.css";
 
 const Reservation = () => {
   const [firstName, setFirstName] = useState("");
@@ -12,10 +13,45 @@ const Reservation = () => {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [phone, setPhone] = useState(0);
+  const [warning, setWarning] = useState("");
   const navigate = useNavigate();
+
+  const validateForm = () => {
+    let newErrors = {};
+
+    if (!firstName.trim()) newErrors.firstName = "First name is required";
+    if (!lastName.trim()) newErrors.lastName = "Last name is required";
+
+    if (!email || !email.includes("@"))
+      newErrors.email = "Valid email is required";
+
+    if (!phone || phone.toString().length < 10)
+      newErrors.phone = "Valid phone number required";
+
+    if (!date) newErrors.date = "Date is required";
+    if (!time) newErrors.time = "Time is required";
+
+    return newErrors;
+  };
 
   const handleReservation = async (e) => {
     e.preventDefault();
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      const errorMessages = Object.values(validationErrors);
+       if (errorMessages.length === 1) {
+      setWarning(errorMessages[0]); // single error
+    } else {
+      setWarning("Form not filled correctly"); // multiple errors
+    }
+
+    // ⏳ Auto remove after 3 sec
+    setTimeout(() => {
+      setWarning("");
+    }, 3000);
+      return;
+    }
     try {
       const { data } = await axios.post(
         "http://localhost:4000/api/v1/reservation/send",
@@ -25,7 +61,7 @@ const Reservation = () => {
             "Content-Type": "application/json",
           },
           withCredentials: true,
-        }
+        },
       );
       toast.success(data.message);
       setFirstName("");
@@ -94,6 +130,7 @@ const Reservation = () => {
                   onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
+              {warning && <p className="form-warning">{warning}</p>}
               <button type="submit" onClick={handleReservation}>
                 RESERVE NOW{" "}
                 <span>
