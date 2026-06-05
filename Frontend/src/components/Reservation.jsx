@@ -16,6 +16,8 @@ const Reservation = () => {
   const [warning, setWarning] = useState("");
   const navigate = useNavigate();
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const validateForm = () => {
     let newErrors = {};
 
@@ -54,7 +56,7 @@ const Reservation = () => {
     }
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/v1/reservation/send",
+       "${API_URL}/api/v1/reservation/send",
         { firstName, lastName, email, phone, date, time },
         {
           headers: {
