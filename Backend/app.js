@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import { errorMiddleware } from "./middlewares/error.js";
 import reservationRouter from "./routes/reservationRoute.js";
-import { dbConnection } from "./Database/dbConnection.js";
+import { dbConnection } from "./Database/dbconnection.js";
 import {sendReservation} from './controller/reservation.js'
 
 dotenv.config({ path: "./config/config.env" });
